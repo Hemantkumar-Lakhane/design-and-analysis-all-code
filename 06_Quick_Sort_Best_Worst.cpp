@@ -1,42 +1,53 @@
 // Q6. Implement Quick Sort and analyze best and worst cases for different arrangements.
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
-long long comparisons = 0;
-int partitionLast(vector<int> &a, int l, int r)
-{
-    int pivot = a[r], i = l - 1;
-    for (int j = l; j < r; j++)
-    {
-        ++comparisons;
-        if (a[j] <= pivot)
-            swap(a[++i], a[j]);
+
+int comparisons = 0;
+
+int partition(vector<int> &arr, int start, int end) {
+    int pivot = arr[end]; // last element as pivot
+    int i = start - 1;
+
+    for (int j = start; j < end; j++) {
+        comparisons++;
+        if (arr[j] <= pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
     }
-    swap(a[i + 1], a[r]);
+    swap(arr[i + 1], arr[end]);
     return i + 1;
 }
-void quickSort(vector<int> &a, int l, int r)
-{
-    if (l < r)
-    {
-        int p = partitionLast(a, l, r);
-        quickSort(a, l, p - 1);
-        quickSort(a, p + 1, r);
+
+void quicksort(vector<int> &arr, int start, int end) {
+    if (start < end) {
+        int p = partition(arr, start, end);
+        quicksort(arr, start, p - 1);
+        quicksort(arr, p + 1, end);
     }
 }
-int main()
-{
+
+int main() {
     int n;
     cout << "Enter size: ";
     cin >> n;
-    if (n < 0)
-        return 0;
-    vector<int> a(n);
+    if (n < 0) return 0;
+
+    vector<int> arr(n);
     cout << "Enter elements: ";
-    for (int &x : a)
-        cin >> x;
-    quickSort(a, 0, n - 1);
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
+    }
+
+    quicksort(arr, 0, n - 1);
+
     cout << "Sorted: ";
-    for (int x : a)
-        cout << x << " ";
-    cout << "\nPartition comparisons: " << comparisons << "\nBest/Average: O(n log n), worst: O(n^2), recursion stack worst O(n).\n";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << "\nPartition comparisons: " << comparisons;
+    cout << "\nBest/Average: O(n log n), worst: O(n^2), recursion stack worst O(n).\n";
+
+    return 0;
 }

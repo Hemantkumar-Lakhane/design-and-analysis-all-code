@@ -1,37 +1,63 @@
 // Q4. Implement matrix multiplication and determine time and space complexity.
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+
 using namespace std;
-int main()
-{
-    int r1, c1, r2, c2;
+
+vector<vector<long long>> matrix_Multiply(vector<vector<long long>> &mat1, int row1, int col1, vector<vector<long long>> &mat2, int col2) {
+    vector<vector<long long>> result(row1, vector<long long>(col2, 0));
+
+    for (int i = 0; i < row1; i++) {
+        for (int j = 0; j < col2; j++) {
+            for (int k = 0; k < col1; k++) {
+                result[i][j] += mat1[i][k] * mat2[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    int row1, col1, row2, col2;
     cout << "Enter rows and columns of matrix A: ";
-    cin >> r1 >> c1;
+    cin >> row1 >> col1;
     cout << "Enter rows and columns of matrix B: ";
-    cin >> r2 >> c2;
-    if (r1 <= 0 || c1 <= 0 || r2 <= 0 || c2 <= 0 || c1 != r2)
-    {
+    cin >> row2 >> col2;
+
+    if (row1 <= 0 || col1 <= 0 || row2 <= 0 || col2 <= 0 || col1 != row2) {
         cout << "Invalid dimensions.\n";
         return 0;
     }
-    vector<vector<long long>> A(r1, vector<long long>(c1)), B(r2, vector<long long>(c2)), C(r1, vector<long long>(c2, 0));
+
+    vector<vector<long long>> mat1(row1, vector<long long>(col1));
+    vector<vector<long long>> mat2(row2, vector<long long>(col2));
+
     cout << "Enter matrix A:\n";
-    for (auto &row : A)
-        for (auto &x : row)
-            cin >> x;
+    for (int i = 0; i < row1; i++) {
+        for (int j = 0; j < col1; j++) {
+            cin >> mat1[i][j];
+        }
+    }
+
     cout << "Enter matrix B:\n";
-    for (auto &row : B)
-        for (auto &x : row)
-            cin >> x;
-    for (int i = 0; i < r1; i++)
-        for (int j = 0; j < c2; j++)
-            for (int k = 0; k < c1; k++)
-                C[i][j] += A[i][k] * B[k][j];
+    for (int i = 0; i < row2; i++) {
+        for (int j = 0; j < col2; j++) {
+            cin >> mat2[i][j];
+        }
+    }
+
+    vector<vector<long long>> ans = matrix_Multiply(mat1, row1, col1, mat2, col2);
+
     cout << "Product matrix:\n";
-    for (auto &row : C)
-    {
-        for (auto x : row)
-            cout << x << " ";
+    for (int i = 0; i < row1; i++) {
+        for (int j = 0; j < col2; j++) {
+            cout << ans[i][j] << " ";
+        }
         cout << "\n";
     }
+
     cout << "Time: O(r1*c1*c2); output space: O(r1*c2).\n";
+
+    return 0;
 }
